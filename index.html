@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Big Data (Part 2) — 60-Question Deep Conceptual Exam Lab</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --card-hover: #263449;
+      --border: #334155;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-dark: #0284c7;
+      --green-bg: rgba(16, 185, 129, 0.16);
+      --green-border: #10b981;
+      --green-text: #6ee7b7;
+      --red-bg: rgba(239, 68, 68, 0.16);
+      --red-border: #ef4444;
+      --red-text: #fca5a5;
+      --badge-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-area h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .title-area p {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .stat-pill {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .stat-pill.correct {
+      border-color: var(--green-border);
+      color: var(--green-text);
+    }
+
+    .stat-pill.wrong {
+      border-color: var(--red-border);
+      color: var(--red-text);
+    }
+
+    .btn {
+      background: var(--accent-dark);
+      color: #fff;
+      border: none;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      color: #0f172a;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: transparent;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 16px;
+    }
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .filter-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-right: 4px;
+    }
+
+    .chip {
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .chip.active, .chip:hover {
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .q-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .q-card.answered-correct {
+      border-left: 5px solid var(--green-border);
+    }
+
+    .q-card.answered-wrong {
+      border-left: 5px solid var(--red-border);
+    }
+
+    .q-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: var(--badge-bg);
+      border: 1px solid var(--border);
+      color: var(--accent);
+    }
+
+    .badge.slide {
+      color: #fbbf24;
+      border-color: rgba(251, 191, 36, 0.35);
+    }
+
+    .badge.type {
+      color: #c084fc;
+      border-color: rgba(192, 132, 252, 0.35);
+    }
+
+    .q-text {
+      font-size: 1.04rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #f1f5f9;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-size: 0.94rem;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background: var(--card-hover);
+      border-color: var(--accent);
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    .opt-letter {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .opt-btn.correct-choice {
+      background: var(--green-bg) !important;
+      border-color: var(--green-border) !important;
+      color: #ecfdf5 !important;
+    }
+
+    .opt-btn.correct-choice .opt-letter {
+      background: var(--green-border);
+      border-color: var(--green-border);
+      color: #064e3b;
+    }
+
+    .opt-btn.wrong-choice {
+      background: var(--red-bg) !important;
+      border-color: var(--red-border) !important;
+      color: #fef2f2 !important;
+    }
+
+    .opt-btn.wrong-choice .opt-letter {
+      background: var(--red-border);
+      border-color: var(--red-border);
+      color: #fff;
+    }
+
+    .explanation-box {
+      margin-top: 16px;
+      padding: 15px 18px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      display: none;
+    }
+
+    .explanation-box.visible {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+      font-weight: 700;
+      font-size: 0.86rem;
+    }
+
+    .exp-header.pass {
+      color: var(--green-text);
+    }
+
+    .exp-header.fail {
+      color: var(--red-text);
+    }
+
+    .retry-mini {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    .retry-mini:hover {
+      color: var(--text);
+      border-color: var(--accent);
+    }
+
+    code {
+      background: rgba(56, 189, 248, 0.12);
+      color: #7dd3fc;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88em;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="title-area">
+        <h1>Big Data (Part 2) — Deep Conceptual Exam Lab</h1>
+        <p>60 Analytical & Scenario-Based Questions • Covers All 28 Slides (HDFS, MapReduce, Spark & RDDs)</p>
+      </div>
+      <div class="stats-bar">
+        <span class="stat-pill" id="stat-progress">Answered: 0 / 60</span>
+        <span class="stat-pill correct" id="stat-correct">Correct: 0</span>
+        <span class="stat-pill wrong" id="stat-wrong">Wrong: 0</span>
+        <span class="stat-pill" id="stat-score">Score: 0%</span>
+        <button class="btn btn-outline" onclick="resetAll()">Reset Lab</button>
+        <button class="btn" onclick="downloadHTML()">Download HTML</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="controls">
+      <input type="text" id="searchBox" class="search-input" placeholder="Search concepts (e.g., InputSplit, Shuffle, Driver, Executor, local[4], Disk Spilling, Lazy Evaluation, reduceByKey, Mahout)..." oninput="renderQuestions()" />
+      <div class="filter-row" id="topicFilters">
+        <span class="filter-label">Topic:</span>
+        <button class="chip active" onclick="setTopic('ALL', this)">All 60 Questions</button>
+        <button class="chip" onclick="setTopic('MapReduce SUM & HDFS Blocks', this)">MapReduce SUM & Blocks (Slides 1–9)</button>
+        <button class="chip" onclick="setTopic('Spark Roles, Driver & local[4]', this)">Spark Roles & local[4] (Slides 10–14)</button>
+        <button class="chip" onclick="setTopic('Memory, Spilling & Lazy Eval', this)">Memory & Lazy Eval (Slides 15–17)</button>
+        <button class="chip" onclick="setTopic('RDDs, DataFrames & Partitions', this)">RDDs & Partitions (Slides 18–20)</button>
+        <button class="chip" onclick="setTopic('reduceByKey, SQL & Unified Engine', this)">reduceByKey, SQL & Unified Spark (Slides 21–28)</button>
+      </div>
+      <div class="filter-row" id="statusFilters">
+        <span class="filter-label">Filter:</span>
+        <button class="chip active" onclick="setStatus('ALL', this)">All Statuses</button>
+        <button class="chip" onclick="setStatus('UNANSWERED', this)">Unanswered</button>
+        <button class="chip" onclick="setStatus('WRONG', this)">Incorrect Only</button>
+        <button class="chip" onclick="setStatus('FALSE_STMT', this)">"Identify the FALSE Statement" Questions</button>
+      </div>
+    </div>
+
+    <div id="questionsContainer"></div>
+  </div>
+
+  <script>
+    const questions = [
+      // Q1 - Q4: ans 1, 2, 0, 3
+      {
+        id: 1,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 1 & 2",
+        type: "Conceptual Analysis",
+        q: "In Slide 2 ('MapReduce SUM: The Complete Sales File'), the file sales.csv contains 6 rows of individual sales in JOD across Irbid (100, 50, 30) and Amman (200, 80, 20). Conceptually, what two logical operations are required to answer 'What is the total sales amount for each city?'",
+        options: [
+          "Sort the file alphabetically by city name and select only the first row for each city.",
+          "Group the records by City, and then add the Sales values within each city (producing Irbid: 180 JOD and Amman: 300 JOD).",
+          "Sum all six numbers into a single grand total of 480 JOD and divide equally by the number of cities.",
+          "Overwrite the original sales.csv file on disk by replacing individual transaction rows with average city values."
+        ],
+        ans: 1,
+        exp: "Slide 2 defines the exact logical problem: 'Group by City. Add the Sales values within each city' to obtain Irbid: 180 JOD (100 + 50 + 30) and Amman: 300 JOD (200 + 80 + 20)."
+      },
+      {
+        id: 2,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slide 3",
+        type: "Architectural Reasoning",
+        q: "In Slide 3 ('MapReduce SUM: Data in HDFS'), Block 1 is shown on Machine A, Block 2 on Machine B, and Block 3 on Machine C, with a note stating: '3 blocks. Extra replicas exist on these machines for fault tolerance.' Why don't those extra replicas cause the MapReduce job to double-count or triple-count the sales totals?",
+        options: [
+          "Because HDFS automatically deletes all extra replicas before a MapReduce job starts and recreates them afterward.",
+          "Because the Reduce phase divides the final sum by the replication factor to cancel out duplicate blocks.",
+          "Because extra replicas exist strictly for fault tolerance if a machine fails; each logical block is processed only once via its assigned InputSplit.",
+          "Because extra replicas only store the column headers (City, Sales) rather than the actual numeric JOD values."
+        ],
+        ans: 2,
+        exp: "Slides 3 & 4 explain that HDFS stores 3 blocks with extra replicas for fault tolerance, while 'One Map task reads the records assigned by one InputSplit' (where 1 logical block corresponds to 1 split in the example)."
+      },
+      {
+        id: 3,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 3 & 4",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements regarding HDFS Blocks and InputSplits in the MapReduce SUM example (Slides 3 & 4) is FALSE?",
+        options: [
+          "An InputSplit is a physical backup copy of a file written to disk to replace failed hard drives.",
+          "An HDFS Block stores part of a file physically on disk across DataNodes.",
+          "An InputSplit describes the input records assigned to a single Map task.",
+          "In the course's sales.csv example, 1 HDFS block corresponds to 1 InputSplit."
+        ],
+        ans: 0,
+        exp: "Slide 4 distinguishes the storage concept from the processing concept: 'HDFS Block: Stores part of a file on disk' whereas 'InputSplit: Describes the input for a Map task.'"
+      },
+      {
+        id: 4,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slide 4",
+        type: "Deep Comparison",
+        q: "Why does the Hadoop architecture distinguish between an 'HDFS Block' and an 'InputSplit' (Slide 4) rather than using a single term for both?",
+        options: [
+          "Because HDFS Blocks only exist in Apache Spark, whereas InputSplits only exist in Spark SQL.",
+          "Because HDFS Blocks are stored in RAM, whereas InputSplits are permanently archived in cloud storage.",
+          "Because an HDFS Block can only hold Amman records, whereas an InputSplit can only hold Irbid records.",
+          "Because an HDFS Block is a storage-level unit ('stores part of a file on disk'), whereas an InputSplit is a processing-level assignment ('describes the input for a Map task')."
+        ],
+        ans: 3,
+        exp: "Slide 4 highlights this exact separation of concerns: an HDFS Block 'Stores part of a file on disk', while an InputSplit 'Describes the input for a Map task. One Map task reads the records assigned by one InputSplit.'"
+      },
+
+      // Q5 - Q8: ans 2, 0, 3, 1
+      {
+        id: 5,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 4 & 5",
+        type: "Scenario Analysis",
+        q: "In Slide 5 ('Map: Keep the City and Sale Value'), InputSplit 1 contains 'Irbid, 100' and 'Amman, 200'. What is the exact role of Map 1 when processing InputSplit 1?",
+        options: [
+          "Map 1 adds 100 and 200 together to emit a single combined pair (Total, 300).",
+          "Map 1 connects over the network to Machine B and Machine C to fetch the remaining Irbid records before emitting anything.",
+          "Map 1 reads the records assigned by InputSplit 1 and emits a (city, sale amount) key-value pair for each record: (Irbid, 100) and (Amman, 200).",
+          "Map 1 filters out Amman records and only emits Irbid records so that only one reducer is needed."
+        ],
+        ans: 2,
+        exp: "Slide 5 states: 'Each Map task emits (city, sale amount).' Thus Map 1 reads InputSplit 1 and emits (Irbid, 100) and (Amman, 200)."
+      },
+      {
+        id: 6,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 5 & 6",
+        type: "Architectural Reasoning",
+        q: "After Map 1, Map 2, and Map 3 finish executing on their respective splits (Slide 5), why can't Map 1 immediately output the final total sales for Irbid?",
+        options: [
+          "Because Map 1 only sees the records in InputSplit 1 (Irbid: 100), while the other Irbid contributions (Irbid: 50 in Map 2 and Irbid: 30 in Map 3) were processed independently by other Map tasks.",
+          "Because Map tasks are not allowed to read numeric values and can only read city names.",
+          "Because the final sales totals must be calculated by the HDFS NameNode before Map 1 starts.",
+          "Because Map 1 stores its output in a Spark DataFrame that requires a SQL GROUP BY query."
+        ],
+        ans: 0,
+        exp: "Slide 6 ('Why Do We Need Shuffle?') shows that Irbid's sales are scattered across Map 1 (Irbid: 100), Map 2 (Irbid: 50), and Map 3 (Irbid: 30). Shuffle is needed to bring the contributions for the same key together."
+      },
+      {
+        id: 7,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 6 & 7",
+        type: "Pipeline Tracing",
+        q: "In Slide 7 ('Shuffle: Group Values by City'), what is the exact input to the Shuffle stage, what is its grouped output, and what placement rule does it enforce?",
+        options: [
+          "Input: raw CSV files on disk; Output: 3 InputSplits; Rule: each city must be split across all available reducers.",
+          "Input: Irbid = 180 and Amman = 300; Output: (Irbid, 100) and (Amman, 200); Rule: all reducers write to local RAM.",
+          "Input: SQL tables; Output: Python lists; Rule: all cities must be processed by a single Map task.",
+          "Input: pairs from Map 1, Map 2, and Map 3; Output: Irbid [100, 50, 30] and Amman [200, 80, 20]; Rule: all values for the same city go to the same reducer."
+        ],
+        ans: 3,
+        exp: "Slide 7 shows Shuffle taking the pairs from Map 1, Map 2, and Map 3, grouping them into Irbid [100, 50, 30] and Amman [200, 80, 20], and states: 'All values for the same city go to the same reducer.'"
+      },
+      {
+        id: 8,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slide 7",
+        type: "Conceptual Analysis",
+        q: "Suppose a flawed distributed system violated the rule on Slide 7 ('All values for the same city go to the same reducer') and sent [100, 50] for Irbid to Reducer A while sending [30] for Irbid to Reducer B without any further aggregation. What would happen?",
+        options: [
+          "Both reducers would still output the correct total of 180 JOD for Irbid automatically.",
+          "Neither reducer would have all contributions for the key 'Irbid', resulting in incomplete partial sums (150 and 30) instead of the true city total (180).",
+          "HDFS would automatically merge the two reducers' disks using block replication.",
+          "The Map tasks would re-read the InputSplits and sum the values before the Shuffle."
+        ],
+        ans: 1,
+        exp: "Slides 6 & 7 explain that Shuffle must bring ALL contributions for the same key together ('All values for the same city go to the same reducer') so that the reducer can sum 100 + 50 + 30 = 180."
+      },
+
+      // Q9 - Q12: ans 3, 1, 0, 2
+      {
+        id: 9,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slide 8",
+        type: "Pipeline Tracing",
+        q: "According to Slide 8 ('Reduce: Sum the Values'), once the Shuffle stage delivers Irbid [100, 50, 30] and Amman [200, 80, 20], what does the Reduce stage do and where can the job write its final output?",
+        options: [
+          "It splits the arrays back into 6 individual pairs and writes them to YARN.",
+          "It overwrites the input blocks inside sales.csv and deletes the original transaction records.",
+          "It sends the arrays back to Map 1, Map 2, and Map 3 to verify the schema.",
+          "It sums the grouped values for each city (Irbid: 100 + 50 + 30 = 180; Amman: 200 + 80 + 20 = 300), and the job can write its output files to HDFS."
+        ],
+        ans: 3,
+        exp: "Slide 8 shows Reduce summing Irbid (100 + 50 + 30 -> Total = 180) and Amman (200 + 80 + 20 -> Total = 300), and notes at the bottom: 'The job can write its output files to HDFS.'"
+      },
+      {
+        id: 10,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slide 9",
+        type: "Conceptual Synthesis",
+        q: "Slide 9 ('The Complete SUM Example') summarizes the entire distributed workflow in four concise statements. Which option states those exact four roles in their proper architectural order?",
+        options: [
+          "HDFS groups. Map stores blocks. Shuffle sums values. Reduce emits pairs.",
+          "HDFS stores. Map emits pairs. Shuffle groups. Reduce sums.",
+          "InputSplit stores. HDFS maps. Reduce shuffles. YARN sums.",
+          "Map reads disk. Reduce groups keys. Shuffle adds totals. HDFS schedules."
+        ],
+        ans: 1,
+        exp: "Slide 9 concludes the MapReduce section with the exact four-part summary: 'HDFS stores. Map emits pairs. Shuffle groups. Reduce sums.'"
+      },
+      {
+        id: 11,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 2–9",
+        type: "Identify the FALSE Statement",
+        q: "Reviewing the complete MapReduce SUM example across Slides 2–9, which of the following statements is FALSE?",
+        options: [
+          "During the Map stage, Map 1, Map 2, and Map 3 communicate with each other to sum all Irbid sales before the Shuffle begins.",
+          "In the example, sales.csv is stored across 3 HDFS blocks (Block 1 on Machine A, Block 2 on Machine B, Block 3 on Machine C).",
+          "Each of the 3 Map tasks processes one InputSplit and emits two (city, sale amount) pairs.",
+          "The Shuffle stage brings together [100, 50, 30] for Irbid and [200, 80, 20] for Amman so the Reduce stage can calculate 180 and 300."
+        ],
+        ans: 0,
+        exp: "Map tasks run independently on their assigned InputSplits and simply emit (city, sale amount) pairs (Slide 5). Grouping contributions across Map tasks is the responsibility of Shuffle (Slides 6–7)."
+      },
+      {
+        id: 12,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 5–9",
+        type: "Quantitative & Pipeline Tracing",
+        q: "Suppose a fourth block (Block 4 / InputSplit 4) was present in HDFS containing two additional rows: 'Irbid, 20' and 'Zarqa, 70'. Following the exact MapReduce logic of Slides 5–9, what would Map 4 emit, and what would the final Reduce output be?",
+        options: [
+          "Map 4 emits (Irbid, 200); final output is Irbid: 200, Amman: 300 (Zarqa is ignored because it only appears in one block).",
+          "Map 4 emits (Zarqa, 90); final output is Irbid: 180, Amman: 300, Zarqa: 90.",
+          "Map 4 emits (Irbid, 20) and (Zarqa, 70); Shuffle groups Irbid [100, 50, 30, 20], Amman [200, 80, 20], and Zarqa [70]; Reduce outputs Irbid: 200, Amman: 300, and Zarqa: 70.",
+          "Map 4 fails because MapReduce can only group keys that appear in all four blocks."
+        ],
+        ans: 2,
+        exp: "Following Slides 5–9: Map 4 emits (city, sale amount) pairs for its split -> (Irbid, 20) and (Zarqa, 70); Shuffle groups all values by key; Reduce sums each key's list (Irbid: 180 + 20 = 200, Amman: 300, Zarqa: 70)."
+      },
+
+      // Q13 - Q16: ans 1, 3, 0, 2
+      {
+        id: 13,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 10",
+        type: "Deep Comparison",
+        q: "Slide 10 ('Hadoop, HDFS and Spark: Different Roles') defines Hadoop as a collection of tools and contrasts it with Spark. How does Slide 10 specifically define the role of YARN compared to HDFS, MapReduce, and Spark?",
+        options: [
+          "YARN stores file blocks across computers, while HDFS allocates CPU and memory.",
+          "YARN allocates CPU and memory to applications, while HDFS stores file blocks across computers, MapReduce processes data using map and reduce, and Spark is a processing engine that reads and analyzes data.",
+          "YARN is a Python library for writing Spark SQL queries on local CSV files.",
+          "YARN is a processing engine that calculates total sales for each city without using CPU or memory."
+        ],
+        ans: 1,
+        exp: "Slide 10 explicitly defines each role: HDFS ('Stores file blocks across computers'), MapReduce ('Processes data using map and reduce'), YARN ('Allocates CPU and memory to applications'), and Spark ('A processing engine that reads and analyzes data')."
+      },
+      {
+        id: 14,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slides 10 & 11",
+        type: "Scenario Analysis",
+        q: "A student wants to practice calculating total sales per city from sales.csv on a personal laptop using PySpark, while a company wants to run the same Spark logic across a 50-node cluster using HDFS and YARN. According to Slides 10 and 11, how does Spark support both scenarios?",
+        options: [
+          "Spark requires installing HDFS and YARN on the student's laptop before it can read a local CSV file.",
+          "PySpark can only run on one computer and cannot be used when Spark runs across a cluster.",
+          "Spark must rewrite the local sales.csv file into MapReduce Java code before running on a single computer.",
+          "Spark can use HDFS and YARN for larger workloads across a cluster, or run locally on one computer reading a local file without HDFS or YARN."
+        ],
+        ans: 3,
+        exp: "Slide 10 states: 'Spark can use HDFS and YARN or run locally without them.' Slide 11 adds: 'All of this can run on one computer. For larger workloads, Spark can run across a cluster.'"
+      },
+      {
+        id: 15,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 11",
+        type: "Conceptual Analysis",
+        q: "According to Slide 11 ('Spark in Our Course'), what does 'PySpark' mean and what is the division of responsibility between Python and Spark?",
+        options: [
+          "PySpark means using Spark through Python: we use Python to tell Spark what to calculate, and the Spark engine reads the records, groups by city, and adds the amounts.",
+          "PySpark is a separate database engine written entirely in Python that replaces Apache Spark.",
+          "PySpark means converting all HDFS DataNodes into Python virtual environments.",
+          "Python executes all distributed disk shuffling by itself, while Spark only prints the final text to the screen."
+        ],
+        ans: 0,
+        exp: "Slide 11 states: 'PySpark means using Spark through Python. We use Python to tell Spark what to calculate.' Spark then reads the records, groups by city, and adds the amounts."
+      },
+      {
+        id: 16,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slides 10–12",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements about Spark's role and how it organizes work (Slides 10–12) is FALSE?",
+        options: [
+          "Spark is a processing engine that reads and analyzes data, such as calculating total sales for each city.",
+          "In Spark, you describe the computation, and Spark coordinates the execution.",
+          "When using PySpark, the developer must manually assign each task to a specific CPU thread and manually retry any task that fails.",
+          "Spark organizes work through Scheduling (assigning tasks when resources are available), Monitoring (tracking progress and retrying failed tasks), and Distributing (processing partitions across available workers)."
+        ],
+        ans: 2,
+        exp: "Slide 12 explains that Spark automatically handles Scheduling ('Assign tasks when resources are available'), Monitoring ('Track progress and retry failed tasks'), and Distributing ('Process partitions across available workers'): 'You describe the computation, and Spark coordinates execution.'"
+      },
+
+      // Q17 - Q20: ans 0, 2, 1, 3
+      {
+        id: 17,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 12",
+        type: "Scenario Analysis",
+        q: "While a Spark application is running across several workers, one worker experiences a temporary glitch and a task processing Partition 3 fails. Which of the three organizational mechanisms on Slide 12 handles this situation, and what does it do?",
+        options: [
+          "Monitoring — it tracks progress and automatically retries failed tasks.",
+          "Distributing — it deletes Partition 3 so the job can finish with partial data.",
+          "Scheduling — it shuts down the entire cluster whenever a task fails.",
+          "Lazy Evaluation — it rewrites the original CSV file on disk."
+        ],
+        ans: 0,
+        exp: "Slide 12 defines Monitoring as: 'Track progress and retry failed tasks.'"
+      },
+      {
+        id: 18,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 13",
+        type: "Deep Comparison",
+        q: "In Slide 13 ('Spark on a Cluster: Who Does What?'), how are responsibilities divided between the 'Driver' and the 'Executors'?",
+        options: [
+          "The Driver runs tasks directly on data partitions, while Executors only plan the execution graph.",
+          "Both the Driver and Executors perform identical roles without any coordination hierarchy.",
+          "The Driver coordinates by planning and scheduling tasks, while the Executors run the tasks on partitions.",
+          "Executors only exist in local mode, while the Driver only exists when YARN is installed."
+        ],
+        ans: 2,
+        exp: "Slide 13 defines: Driver ('Plans and schedules tasks') and Executor ('Runs tasks on partitions'), summarizing: 'The driver coordinates. Executors run the tasks.'"
+      },
+      {
+        id: 19,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 13",
+        type: "Conceptual Analysis",
+        q: "Slide 13 is titled 'Spark on a Cluster: Who Does What?' showing a Driver communicating with multiple Executors, but includes a key note at the top: 'In local mode, the work runs within one computer.' What does this imply about local mode vs. cluster mode?",
+        options: [
+          "In local mode, tasks cannot be planned or scheduled because there is no Driver.",
+          "In local mode, both the coordination (planning/scheduling tasks) and the execution (running tasks on partitions) take place within a single computer rather than across separate cluster machines.",
+          "In local mode, Spark cannot process partitions and must read the entire file as a single unpartitioned string.",
+          "In cluster mode, Executors plan the tasks and the Driver is no longer needed."
+        ],
+        ans: 1,
+        exp: "Slide 13 explains that on a cluster the Driver coordinates and Executors run the tasks across machines, whereas 'In local mode, the work runs within one computer.'"
+      },
+      {
+        id: 20,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 14",
+        type: "Architectural Reasoning",
+        q: "In Slide 14 ('Spark Local Mode: The Part 1 Example'), 1,000,000 records are split into 4 equal partitions (250,000 rows each) and processed using `local[4]`. How are Tasks, Threads, and Logical Cores connected in this diagram?",
+        options: [
+          "Each partition is sent to a different physical server rack via 4 network switches.",
+          "A single thread (Thread 1) runs all 4 tasks sequentially while Threads 2, 3, and 4 remain idle.",
+          "Spark bypasses the operating system and physically solders each partition to a hard drive block.",
+          "Task 1 through Task 4 process Partition 1 through Partition 4 via Thread 1 through Thread 4 (up to 4 tasks at a time on this computer), while the OS schedules those threads on available logical cores."
+        ],
+        ans: 3,
+        exp: "Slide 14 illustrates Partition 1–4 (250,000 rows each) processed by Task 1–4 via Thread 1–4, with the OS scheduling threads on available logical cores, and notes: 'local[4]: up to 4 tasks at a time on this computer.'"
+      },
+
+      // Q21 - Q24: ans 2, 0, 3, 1
+      {
+        id: 21,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 14",
+        type: "Conceptual Trap & Analysis",
+        q: "Slide 14 highlights a critical distinction at the bottom: 'The 4 in local[4] means worker threads, not data partitions.' Based on this principle, what happens if you have an RDD or DataFrame with 8 data partitions on your laptop, and you configure Spark with `local[4]`?",
+        options: [
+          "Spark throws an error and refuses to run because the number inside local[N] must always equal the number of data partitions.",
+          "Spark automatically deletes 4 of the 8 data partitions so that only 4 partitions remain.",
+          "All 8 data partitions will be processed, but at most 4 tasks will run concurrently at a time via the 4 worker threads.",
+          "Spark creates 8 worker threads anyway, ignoring the local[4] setting completely."
+        ],
+        ans: 2,
+        exp: "Because the 4 in `local[4]` specifies worker threads ('up to 4 tasks at a time on this computer') rather than data partitions, Spark can process any number of partitions using up to 4 concurrent worker threads."
+      },
+      {
+        id: 22,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 14",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements regarding Spark Local Mode (`local[4]`) on Slide 14 is FALSE?",
+        options: [
+          "Setting `local[4]` forces Spark to split every dataset into exactly 4 partitions, because the number 4 defines the partition count.",
+          "In the 1,000,000-record example with 4 equal partitions, each partition contains 250,000 rows.",
+          "The operating system (OS) schedules the worker threads (Thread 1 to Thread 4) onto available logical cores.",
+          "`local[4]` allows up to 4 tasks to run at a time on that single computer."
+        ],
+        ans: 0,
+        exp: "Slide 14 explicitly refutes A at the bottom: 'The 4 in local[4] means worker threads, not data partitions.'"
+      },
+      {
+        id: 23,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slide 14",
+        type: "Scenario Analysis",
+        q: "Suppose you keep the exact same 4 data partitions (250,000 rows each, totaling 1,000,000 records) from Slide 14, but you change the master setting from `local[4]` to `local[2]`. What changes and what stays the same?",
+        options: [
+          "The dataset is shrunk to 500,000 records because only 2 partitions can exist.",
+          "The 4 partitions are moved across 2 separate computers in a data center.",
+          "Nothing changes; 4 tasks still run at the exact same instant.",
+          "The data still consists of 4 partitions of 250,000 rows each, but Spark now uses 2 worker threads so at most 2 tasks run at a time on the computer."
+        ],
+        ans: 3,
+        exp: "As Slide 14 explains, the number in `local[N]` controls the number of worker threads (how many tasks can run at a time on the computer), while the 4 data partitions remain pieces of the dataset."
+      },
+      {
+        id: 24,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 15",
+        type: "Deep Comparison",
+        q: "According to Slide 15 ('How Spark Uses Memory'), how do the roles of 'Memory (RAM)' and 'Disk / Storage' complement each other during Spark execution?",
+        options: [
+          "Spark uses Disk to process all calculations, and only uses RAM to store permanent backup files after the computer turns off.",
+          "Spark uses Memory (RAM) to process data and keep useful results for reuse, while using Disk / Storage to read and write files and store temporary data when needed.",
+          "Spark loads the entire multi-terabyte dataset into RAM all at once and never touches Disk after the job begins.",
+          "Spark uses RAM exclusively for the Driver and Disk exclusively for Executors."
+        ],
+        ans: 1,
+        exp: "Slide 15 defines Memory (RAM) as: 'Process data and keep useful results for reuse' and Disk / Storage as: 'Read and write files. Store temporary data when needed.'"
+      },
+
+      // Q25 - Q28: ans 0, 2, 1, 3
+      {
+        id: 25,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 15",
+        type: "Conceptual Analysis",
+        q: "A developer claims: 'Spark is always fast regardless of how you write your query, and it can only process a dataset if 100% of the file fits inside RAM at the same time.' Based on Slide 15, why are BOTH parts of this claim incorrect?",
+        options: [
+          "Because Spark processes data in partitions so the entire dataset doesn't need to fit in RAM at once, and speed depends on the workload, resources, and execution plan.",
+          "Because Spark is actually slower than single-thread disk processing and never uses RAM.",
+          "Because Spark requires YARN to compress every dataset to under 1 megabyte before reading.",
+          "Because speed depends only on the brand of the server rack, and Spark deletes any data that exceeds RAM."
+        ],
+        ans: 0,
+        exp: "Slide 15 explicitly states: 'Spark processes data in partitions. The entire dataset doesn’t need to fit in RAM at once' and 'Speed depends on the workload, resources, and execution plan.'"
+      },
+      {
+        id: 26,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 16",
+        type: "Scenario Analysis",
+        q: "An engineer runs a heavy sorting and grouping workload in Spark on a dataset that is larger than the computer's available RAM. As memory becomes tight during the grouping operation, how does Spark avoid crashing immediately, and what is this mechanism called on Slide 16?",
+        options: [
+          "Block Replication — Spark sends the excess data to Google Cloud Storage permanently.",
+          "Lazy Deletion — Spark randomly drops rows from the dataset until the remaining rows fit in RAM.",
+          "Disk Spilling — during sorting or grouping, Spark can write temporary data to disk if RAM is tight, helping it process data larger than RAM.",
+          "InputSplitting — Spark converts the RAM modules into HDFS NameNodes."
+        ],
+        ans: 2,
+        exp: "Slide 16 ('Memory-Efficient Processing') explains under 'Use disk when needed': 'During sorting or grouping, Spark can write temporary data to disk if RAM is tight. This is called disk spilling. Helps process data larger than RAM.'"
+      },
+      {
+        id: 27,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 16",
+        type: "Conceptual Nuance",
+        q: "Slide 16 explains that working in partitions and using disk spilling 'Helps process data larger than RAM,' but immediately adds a cautionary note: 'A task can still run out of memory.' Why is this warning important?",
+        options: [
+          "Because disk spilling only works when the computer has no hard drive installed.",
+          "Because while partitioning and disk spilling allow Spark to handle datasets larger than total RAM, an individual task working on an oversized partition or memory-intensive operation can still exceed its available memory limit.",
+          "Because Spark tasks are forbidden from using more than 1 kilobyte of RAM.",
+          "Because disk spilling permanently erases the computer's operating system."
+        ],
+        ans: 1,
+        exp: "Slide 16 balances the benefit ('Helps process data larger than RAM') with the realistic engineering boundary ('A task can still run out of memory') if a task's working memory demand is too large for the available RAM."
+      },
+      {
+        id: 28,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slides 15 & 16",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements regarding Spark's memory usage and memory-efficient processing (Slides 15 & 16) is FALSE?",
+        options: [
+          "Each task works on one part (partition) of the data, and several tasks can run at the same time.",
+          "During sorting or grouping, Spark can write temporary data to disk if RAM is tight, a process called disk spilling.",
+          "Because Spark works in partitions and can spill temporary data to disk, the whole dataset does not need to fit in RAM at once.",
+          "Once disk spilling is enabled, it is physically impossible for any Spark task to ever run out of memory."
+        ],
+        ans: 3,
+        exp: "Slide 16 explicitly states at the bottom: 'Helps process data larger than RAM. A task can still run out of memory.'"
+      },
+
+      // Q29 - Q32: ans 1, 3, 0, 2
+      {
+        id: 29,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 17",
+        type: "Conceptual Analysis",
+        q: "In Slide 17 ('Lazy Evaluation: Plan First'), what happens during Step 1 ('1. Describe the work') versus Step 2 ('2. Request a result')?",
+        options: [
+          "In Step 1, Spark immediately computes and writes intermediate files to disk; in Step 2, Spark deletes the files.",
+          "In Step 1, Spark remembers the steps without running them yet; in Step 2, an action tells Spark to run the required work (the calculation starts when a result is requested).",
+          "In Step 1, the Executor runs the tasks; in Step 2, the Driver plans the tasks.",
+          "In Step 1, Spark loads the entire dataset into RAM; in Step 2, Spark spills the dataset to disk."
+        ],
+        ans: 1,
+        exp: "Slide 17 states: 'The calculation starts when a result is requested. 1. Describe the work: Spark remembers the steps. It does not run them yet. 2. Request a result: An action tells Spark to run the required work.'"
+      },
+      {
+        id: 30,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 17",
+        type: "Architectural Reasoning",
+        q: "How does 'Lazy Evaluation' help reduce memory usage in Apache Spark according to Slide 17?",
+        options: [
+          "By skipping half of the partitions in the dataset whenever an action is called.",
+          "By forcing every intermediate step to write a full copy of the dataset to HDFS.",
+          "By compressing unstructured images into structured SQL integers.",
+          "Because planning first allows compatible steps to run together without storing a full dataset in memory after every single step."
+        ],
+        ans: 3,
+        exp: "Slide 17 explains under 'How this can reduce memory use': 'Compatible steps can run together without storing a full dataset after every step.'"
+      },
+      {
+        id: 31,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 17",
+        type: "Analogy Mapping",
+        q: "Slide 17 uses a 'Restaurant analogy' to explain Lazy Evaluation: 'The chef doesn’t prepare your meal ahead of time. Instead, they start cooking after you confirm your order.' In this analogy, what does 'confirming your order' represent in Spark?",
+        options: [
+          "Calling an action that requests a result (such as `collect()`), which tells Spark to actually run the planned work.",
+          "Defining an input file path on disk without reading it.",
+          "Installing Python and PySpark on a local laptop.",
+          "Dividing an HDFS file into 3 storage blocks across DataNodes."
+        ],
+        ans: 0,
+        exp: "In Slide 17's restaurant analogy, choosing items is '1. Describe the work' (transformations), while confirming the order is '2. Request a result' (an action that tells Spark to start cooking/running the work)."
+      },
+      {
+        id: 32,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slide 17",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements about Lazy Evaluation on Slide 17 is FALSE?",
+        options: [
+          "In Spark, the calculation starts when a result is requested by an action.",
+          "When you describe the work, Spark remembers the steps in a plan rather than executing them immediately.",
+          "Lazy evaluation increases memory consumption because Spark must materialize and store a full copy of the dataset in RAM after every individual step.",
+          "Compatible steps can be combined and executed together without storing a full dataset after every step."
+        ],
+        ans: 2,
+        exp: "Slide 17 states the exact opposite of C: 'How this can reduce memory use: Compatible steps can run together without storing a full dataset after every step.'"
+      },
+
+      // Q33 - Q36: ans 0, 3, 1, 2
+      {
+        id: 33,
+        topic: "RDDs, DataFrames & Partitions",
+        slide: "Slide 18",
+        type: "Deep Comparison",
+        q: "Slide 18 ('RDD and DataFrame: Data Inside Spark') shows the same sample sales records (`Irbid, 100`, `Amman, 200`, `Irbid, 50`) in both an RDD and a DataFrame. How do RDDs and DataFrames compare?",
+        options: [
+          "Both represent data inside Spark and both are processed in parts (partitions), but an RDD is a collection of records whereas a DataFrame organizes data into named columns (`City`, `Sales`).",
+          "An RDD organizes data into named SQL columns, whereas a DataFrame is an unstructured audio file.",
+          "An RDD is processed in parts across partitions, whereas a DataFrame cannot be partitioned and must reside in a single block.",
+          "RDDs are used to store files permanently on HDFS disks, whereas DataFrames are used to allocate CPU cores in YARN."
+        ],
+        ans: 0,
+        exp: "Slide 18 states: 'Spark processes the data. RDDs and DataFrames represent it. The same sample sales records can be represented in either form. RDD: A collection of records that Spark can process in parts. DataFrame: Data organized into named columns, also processed in parts.'"
+      },
+      {
+        id: 34,
+        topic: "RDDs, DataFrames & Partitions",
+        slide: "Slide 19",
+        type: "Conceptual Analysis",
+        q: "In Slide 19 ('One RDD Contains Several Partitions'), the diagram shows three separate boxes: Partition 1 `(Irbid, 100), (Amman, 200)`, Partition 2 `(Irbid, 50), (Amman, 80)`, and Partition 3 `(Irbid, 30), (Amman, 20)`. If a student asks, 'Are these three separate RDDs or three HDFS storage blocks?', what is the exact answer according to Slide 19?",
+        options: [
+          "They are three separate RDDs, and each RDD is also an HDFS storage block on disk.",
+          "They are three HDFS storage blocks managed by the NameNode, not Spark data.",
+          "They are three DataFrames with named columns `City` and `Sales`.",
+          "Neither: a partition is one part of the records in this RDD—all three boxes together represent ONE RDD (Resilient Distributed Dataset), and the diagram shows Spark data, not HDFS storage blocks."
+        ],
+        ans: 3,
+        exp: "Slide 19 explicitly emphasizes both points: 'RDD = Resilient Distributed Dataset. A partition is one part of the records in this RDD. All three boxes together represent ONE RDD. This diagram shows Spark data, not HDFS storage blocks.'"
+      },
+      {
+        id: 35,
+        topic: "RDDs, DataFrames & Partitions",
+        slide: "Slide 20",
+        type: "Architectural Reasoning",
+        q: "Slide 20 ('Partitions and Machines') shows 4 partitions (`Partition 1` to `Partition 4`) placed either on 'One machine' or across 'Machine 1' (Partitions 1 & 2) and 'Machine 2' (Partitions 3 & 4). What fundamental concept does this illustrate?",
+        options: [
+          "A machine can never hold more than one partition at a time.",
+          "A partition is a logical piece of data while a machine runs tasks on it; therefore, the exact same 4 partitions can be processed either on one machine (local mode) or distributed across multiple machines (cluster mode).",
+          "Partitions 1 and 2 can only be processed in local mode, while Partitions 3 and 4 require a cluster.",
+          "Moving from one machine to two machines requires changing the total number of partitions from 4 to 2."
+        ],
+        ans: 1,
+        exp: "Slide 20 states: 'A partition is a piece of data. A machine runs tasks on it. The same 4 partitions can be processed in either setup' (One machine: Partitions 1–4, or Machine 1: Partitions 1–2 and Machine 2: Partitions 3–4)."
+      },
+      {
+        id: 36,
+        topic: "RDDs, DataFrames & Partitions",
+        slide: "Slides 18–20",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements about RDDs, DataFrames, and Partitions (Slides 18–20) is FALSE?",
+        options: [
+          "RDD stands for Resilient Distributed Dataset, and a partition is one part of the records in an RDD.",
+          "The same sample sales records can be represented in Spark either as an RDD or as a DataFrame with named columns.",
+          "If an RDD is divided into 3 partitions (Partition 1, Partition 2, Partition 3), it means the program has created 3 completely separate RDDs that cannot be processed together.",
+          "The same 4 data partitions can be processed on a single machine or distributed across multiple machines."
+        ],
+        ans: 2,
+        exp: "Slide 19 explicitly highlights: 'All three boxes together represent ONE RDD.'"
+      },
+
+      // Q37 - Q40: ans 1, 3, 0, 2
+      {
+        id: 37,
+        topic: "RDDs, DataFrames & Partitions",
+        slide: "Slides 3, 4 & 19",
+        type: "Deep Comparison",
+        q: "Comparing Slide 3 ('MapReduce SUM: Data in HDFS') and Slide 19 ('One RDD Contains Several Partitions'), both diagrams show the 6 sales records divided into 3 boxes of 2 records each. What is the key conceptual difference between the boxes in Slide 3 and the boxes in Slide 19?",
+        options: [
+          "Slide 3 shows Spark DataFrames in RAM, while Slide 19 shows HDFS blocks on disk.",
+          "Slide 3 shows HDFS storage blocks stored on disks across DataNodes, whereas Slide 19 shows partitions of one Spark RDD representing data inside Spark for processing.",
+          "Slide 3 contains 12 records, whereas Slide 19 contains only 2 records.",
+          "There is no difference; an RDD partition is the exact same software component as an HDFS DataNode."
+        ],
+        ans: 1,
+        exp: "Slide 3 shows 'HDFS stores file blocks across DataNodes' (storage layer), whereas Slide 19 shows 'One RDD Contains Several Partitions' and explicitly notes: 'This diagram shows Spark data, not HDFS storage blocks.'"
+      },
+      {
+        id: 38,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 21 & 22",
+        type: "Scenario Analysis",
+        q: "In Slides 21 and 22 ('Spark Example: Sales Data in an RDD'), the 6 rows of `sales.csv` are represented in an RDD named `salesRDD` across 3 input partitions with 2 records each: `(\"Irbid\", 100)`, `(\"Amman\", 200)`, etc. In these pairs, what acts as the 'key' and what acts as the 'value'?",
+        options: [
+          "The partition number (1, 2, 3) is the key, and the city name is the value.",
+          "The sale amount in JOD is the key, and the city name is the value we concatenate.",
+          "The filename `sales.csv` is the key, and the entire row is the value.",
+          "`City` is the key, and `Sales` (the amount in JOD) is the value we will add."
+        ],
+        ans: 3,
+        exp: "Slide 22 states: '`salesRDD` is our name for this RDD of sales records. City is the key. Sales is the value we will add.'"
+      },
+      {
+        id: 39,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 23",
+        type: "Code & Conceptual Analysis",
+        q: "In Slide 23 ('Spark Example: Sum Sales by City'), we write the PySpark line:\n`totalsRDD = salesRDD.reduceByKey(lambda a, b: a + b)`\nWhat is the exact role of `reduceByKey`, what does `lambda a, b: a + b` do, and what do `salesRDD` and `totalsRDD` represent?",
+        options: [
+          "`reduceByKey` combines the values for each city (key), `a + b` adds two numbers for the same city, `salesRDD` represents the input RDD, and `totalsRDD` represents the resulting RDD.",
+          "`reduceByKey` filters out cities with sales below 100, `a + b` concatenates city names, and `salesRDD` is overwritten in place.",
+          "`reduceByKey` sorts the file alphabetically without adding numbers, and `totalsRDD` is a local Python integer equal to 480.",
+          "`reduceByKey` splits one city into multiple partitions, and `a + b` adds Irbid's sales directly to Amman's sales."
+        ],
+        ans: 0,
+        exp: "Slide 23 annotates every part of the code: `reduceByKey` ('Combine the values for each city'), `a + b` ('Add two numbers for the same city'), and '`salesRDD` represents the input. `totalsRDD` represents the result.'"
+      },
+      {
+        id: 40,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 17, 23 & 25",
+        type: "Cross-Slide Synthesis",
+        q: "Connecting Slide 17 ('Lazy Evaluation: Plan First') with Slide 23 (`totalsRDD = salesRDD.reduceByKey(lambda a, b: a + b)`) and Slide 25 (`totalsRDD.collect()`), when does Spark actually execute the shuffle and addition to return the two final city totals?",
+        options: [
+          "Before `salesRDD` is even defined, as soon as Python starts.",
+          "At the exact moment `salesRDD` is named on Slide 22.",
+          "When the action `totalsRDD.collect()` is called to request and retrieve the results; defining `totalsRDD = salesRDD.reduceByKey(...)` describes the work, and requesting the result triggers execution.",
+          "Never—Spark requires a manual MapReduce job to calculate `totalsRDD`."
+        ],
+        ans: 2,
+        exp: "Slide 17 explains that when you describe the work (like `reduceByKey` on Slide 23), Spark remembers the steps without running them yet; when you request a result with an action (like `totalsRDD.collect()` on Slide 25), Spark runs the required work."
+      },
+
+      // Q41 - Q44: ans 0, 3, 1, 2
+      {
+        id: 41,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 24",
+        type: "Pipeline Tracing",
+        q: "In Slide 24 ('Spark Example: Executing reduceByKey'), `salesRDD` has 3 input partitions, each holding one Irbid record and one Amman record. Why does Spark still perform a 'Shuffle' when executing `reduceByKey`?",
+        options: [
+          "Because the contributions for the same city are spread across Input partition 1 (Irbid: 100), Input partition 2 (Irbid: 50), and Input partition 3 (Irbid: 30); Shuffle brings contributions for the same key together so Spark can add them by city.",
+          "Because Spark must convert every RDD into an HDFS block on disk before adding two integers.",
+          "Because `reduceByKey` randomly scrambles city names to anonymize customer data.",
+          "Because Shuffle is needed to delete Amman records from Input partitions 2 and 3."
+        ],
+        ans: 0,
+        exp: "Slide 24 shows Input partitions 1, 2, and 3 feeding into 'Shuffle', stating: 'Shuffle brings contributions together. Spark adds them by city. Spark manages this operation and produces totalsRDD.'"
+      },
+      {
+        id: 42,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 25",
+        type: "Code & Output Analysis",
+        q: "According to Slide 25 ('Spark Example: The Final Totals'), after `reduceByKey` finishes summing Irbid (100 + 50 + 30 = 180) and Amman (200 + 80 + 20 = 300), what does `totalsRDD` contain, how do we retrieve those results, and what happens to the original `sales.csv` file?",
+        options: [
+          "`totalsRDD` contains 6 records; we retrieve them with `salesRDD.sum()`; `sales.csv` is overwritten with 2 rows.",
+          "`totalsRDD` contains 1 record `(480)`; we retrieve it with `reduceByKey()`; `sales.csv` is deleted from disk.",
+          "`totalsRDD` contains 3 HDFS blocks; we retrieve them with `SELECT *`; `sales.csv` is renamed to `totals.csv`.",
+          "`totalsRDD` contains 2 result records `(\"Irbid\", 180)` and `(\"Amman\", 300)`; we retrieve them using `totalsRDD.collect()`; and the source file stays unchanged."
+        ],
+        ans: 3,
+        exp: "Slide 25 shows `totalsRDD: 2 result records (\"Irbid\", 180) (\"Amman\", 300)`, states 'Retrieve these two results: `totalsRDD.collect()`', and concludes: 'The totals match our MapReduce example. The source file stays unchanged.'"
+      },
+      {
+        id: 43,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 23 & 24",
+        type: "Quantitative & Code Reasoning",
+        q: "Suppose that instead of finding the sum of sales for each city, we modified the lambda function in Slide 23 to:\n`maxRDD = salesRDD.reduceByKey(lambda a, b: max(a, b))`\non the exact same 6 records (`Irbid`: 100, 50, 30; `Amman`: 200, 80, 20). What would the 2 result records in `maxRDD` be?",
+        options: [
+          "`(\"Irbid\", 180)` and `(\"Amman\", 300)`",
+          "`(\"Irbid\", 100)` and `(\"Amman\", 200)`",
+          "`(\"Irbid\", 30)` and `(\"Amman\", 20)`",
+          "`(\"Amman\", 200)` only, because Irbid has smaller numbers"
+        ],
+        ans: 1,
+        exp: "Because `reduceByKey` combines values for each city using the provided function `(a, b)`, replacing `a + b` with `max(a, b)` combines `[100, 50, 30]` for Irbid into `100`, and `[200, 80, 20]` for Amman into `200`."
+      },
+      {
+        id: 44,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 21–25",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements about the Spark RDD sales example (Slides 21–25) is FALSE?",
+        options: [
+          "In `salesRDD`, each record is a pair where `City` is the key and `Sales` is the numeric value.",
+          "`totalsRDD = salesRDD.reduceByKey(lambda a, b: a + b)` combines the values for each city by adding them.",
+          "Calling `totalsRDD.collect()` permanently overwrites the original `sales.csv` file on disk so that only 2 rows remain in the CSV file.",
+          "The final totals calculated by Spark (`Irbid = 180`, `Amman = 300`) match the totals from the MapReduce example."
+        ],
+        ans: 2,
+        exp: "Slide 25 explicitly states at the bottom: 'The totals match our MapReduce example. The source file stays unchanged.'"
+      },
+
+      // Q45 - Q48: ans 0, 3, 1, 2
+      {
+        id: 45,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 26",
+        type: "Deep Comparison",
+        q: "Slide 26 ('Same Question, Different Processing Engines') compares how Hadoop MapReduce and Apache Spark solve the city sales problem. Which statement accurately captures their similarity and their difference?",
+        options: [
+          "Both calculate the exact same result (Irbid = 180 and Amman = 300) and share the underlying calculation (shuffle and aggregation by key), but their programming and execution differ: in MapReduce we define a Map function and a Reduce function, whereas in Spark we apply `reduceByKey` with addition to `salesRDD`.",
+          "MapReduce calculates Irbid = 180, whereas Apache Spark calculates an approximate estimate without shuffling.",
+          "In Apache Spark, the programmer must manually code network socket transfers for the shuffle, whereas MapReduce requires no functions at all.",
+          "Both use the exact same Python syntax (`reduceByKey`), and neither engine performs a shuffle."
+        ],
+        ans: 0,
+        exp: "Slide 26 contrasts Hadoop MapReduce ('We define a Map function and a Reduce function. MapReduce manages the shuffle and reduce tasks.') with Apache Spark ('We apply reduceByKey with addition to salesRDD. Spark manages the tasks, shuffle and aggregation.') and concludes: 'The calculation is shared. Programming and execution differ.'"
+      },
+      {
+        id: 46,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 27",
+        type: "Conceptual Mapping",
+        q: "In Slide 27 ('The Same Sales Question in SQL'), the Spark SQL query is written as:\n`SELECT City, SUM(Sales) AS TotalSales FROM sales GROUP BY City;`\nHow do the clauses of this SQL query map conceptually to the stages of our MapReduce example?",
+        options: [
+          "`SELECT City` corresponds to Reduce, while `FROM sales` corresponds to Shuffle.",
+          "`SUM(Sales)` corresponds to HDFS Block replication, while `GROUP BY City` corresponds to deleting local files.",
+          "Spark SQL does not group or sum values; it only displays the raw 6 rows of `sales.csv`.",
+          "`GROUP BY City` corresponds to Shuffle (group values by City), and `SUM(Sales)` corresponds to Reduce (add the Sales values), producing the same result: Irbid = 180 JOD and Amman = 300 JOD."
+        ],
+        ans: 3,
+        exp: "Slide 27 directly aligns the SQL query with the MapReduce example: 'Shuffle: group values by City' corresponds to `GROUP BY City`, and 'Reduce: add the Sales values' corresponds to `SUM(Sales)`, yielding the same result (Irbid = 180 JOD, Amman = 300 JOD)."
+      },
+      {
+        id: 47,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 18 & 27",
+        type: "Cross-Slide Synthesis",
+        q: "Why is the Spark SQL query `SELECT City, SUM(Sales) AS TotalSales FROM sales GROUP BY City;` (Slide 27) naturally suited to the `DataFrame` representation shown on Slide 18?",
+        options: [
+          "Because DataFrames have no column names and can only be queried using Java MapReduce.",
+          "Because a DataFrame organizes data into named columns (`City` and `Sales`), allowing Spark SQL to reference `City` in `GROUP BY City` and `Sales` in `SUM(Sales)` directly by column name.",
+          "Because DataFrames cannot be partitioned across machines.",
+          "Because Spark SQL only works when data is stored as unstructured audio files."
+        ],
+        ans: 1,
+        exp: "Slide 18 defines a DataFrame as 'Data organized into named columns (`City`, `Sales`), also processed in parts,' which directly enables the column-based Spark SQL query on Slide 27 (`SELECT City, SUM(Sales) ... GROUP BY City`)."
+      },
+      {
+        id: 48,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 28",
+        type: "Architectural Mapping",
+        q: "In Slide 28 ('Spark: One Engine for Multiple Data Processing Tasks'), four traditional Hadoop-ecosystem tools are compared by role to four components of the Apache Spark ecosystem. Which option lists all four role comparisons correctly?",
+        options: [
+          "Hadoop MapReduce → Spark SQL; Hive → Spark Streaming; Mahout → Spark Core; Storm → Spark MLlib",
+          "Hadoop MapReduce → Spark MLlib; Hive → Spark Core; Mahout → Spark Streaming; Storm → Spark SQL",
+          "Hadoop MapReduce → Spark; Hive → Spark SQL; Mahout → Spark MLlib; Storm → Spark Streaming",
+          "HDFS → Spark SQL; YARN → Spark MLlib; NameNode → Spark Streaming; DataNode → Spark"
+        ],
+        ans: 2,
+        exp: "Slide 28 shows the four horizontal role-comparison arrows: Hadoop MapReduce → Spark, Hive → Spark SQL, Mahout → Spark MLlib, and Storm → Spark Streaming."
+      },
+
+      // Q49 - Q52: ans 1, 3, 0, 2
+      {
+        id: 49,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 28",
+        type: "Conceptual Trap & Analysis",
+        q: "At the bottom of Slide 28, there is a crucial clarification about the arrows pointing from Hadoop tools (MapReduce, Hive, Mahout, Storm) to Spark components (Spark, Spark SQL, Spark MLlib, Spark Streaming): 'The arrows compare roles, not steps in a program.' What misconception does this statement prevent?",
+        options: [
+          "The misconception that Spark can run on more than one computer.",
+          "The misconception that data must first be processed by Hadoop MapReduce, Hive, Mahout, and Storm as sequential pipeline steps before being passed into Spark; instead, the arrows show which Spark component fulfills the role of each older tool.",
+          "The misconception that Spark SQL can execute `GROUP BY` queries.",
+          "The misconception that Irbid's total sales equal 180 JOD."
+        ],
+        ans: 1,
+        exp: "In previous slides (like Slides 5, 7, and 24), arrows represented sequential data flow steps in a program. On Slide 28, the professor explicitly clarifies: 'The arrows compare roles, not steps in a program'—showing how one unified Spark engine covers the roles that previously required separate tools (MapReduce, Hive, Mahout, Storm)."
+      },
+      {
+        id: 50,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slide 28",
+        type: "Scenario Analysis",
+        q: "An enterprise currently maintains four separate legacy systems: Apache Hive for SQL analytics, Apache Mahout for machine learning, Apache Storm for real-time stream processing, and Hadoop MapReduce for batch jobs. According to Slide 28, what is the primary architectural advantage of migrating to Apache Spark?",
+        options: [
+          "Spark replaces all physical hard drives so the company no longer needs any storage system.",
+          "Spark eliminates the need to partition large datasets.",
+          "Spark forces all SQL queries, machine learning models, and streams to run on a single CPU thread.",
+          "Spark provides one unified processing engine for multiple data processing tasks—covering batch processing (Spark), SQL queries (Spark SQL), machine learning (Spark MLlib), and stream processing (Spark Streaming)."
+        ],
+        ans: 3,
+        exp: "Slide 28 ('Spark: One Engine for Multiple Data Processing Tasks') illustrates how Spark unifies batch processing (replacing MapReduce), SQL (replacing Hive), machine learning (replacing Mahout), and streaming (replacing Storm) under one engine."
+      },
+      {
+        id: 51,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 26–28",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements regarding Slides 26–28 (MapReduce vs. Spark, Spark SQL, and the Unified Spark Engine) is FALSE?",
+        options: [
+          "On Slide 28, the arrows from Hive to Spark SQL and from Mahout to Spark MLlib mean that every Spark program must run Hive and Mahout first before Spark can start.",
+          "Both Hadoop MapReduce and Apache Spark calculate Irbid = 180 and Amman = 300, sharing the underlying calculation while differing in programming and execution.",
+          "The Spark SQL query `SELECT City, SUM(Sales) AS TotalSales FROM sales GROUP BY City;` produces the exact same result (Irbid = 180 JOD, Amman = 300 JOD) as the MapReduce and RDD examples.",
+          "In the role comparison on Slide 28, Apache Storm corresponds to Spark Streaming and Apache Mahout corresponds to Spark MLlib."
+        ],
+        ans: 0,
+        exp: "Slide 28 explicitly warns against A: 'The arrows compare roles, not steps in a program.'"
+      },
+      {
+        id: 52,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slides 12–14 & 20",
+        type: "Cross-Slide Synthesis",
+        q: "How do the concepts of 'Driver', 'Executor', 'Partition', 'Task', and 'Worker Thread' fit together when Spark processes a dataset?",
+        options: [
+          "A Partition plans the schedule; a Driver is a piece of data; and an Executor is a column name in a CSV file.",
+          "A Worker Thread stores files permanently on HDFS; a Task allocates cluster memory in YARN; and a Partition retries failed jobs.",
+          "A Partition is a piece of data; the Driver plans and schedules Tasks; Executors run those Tasks on Partitions; and in local mode (`local[4]`), the 4 worker threads execute up to 4 tasks concurrently on the computer's logical cores.",
+          "Executors only exist when reading SQL tables, while the Driver only exists when reading unstructured audio."
+        ],
+        ans: 2,
+        exp: "This synthesizes Slides 12, 13, 14, and 20: a partition is a piece of data; the Driver coordinates (plans and schedules tasks); Executors run tasks on partitions; and in `local[4]`, 4 worker threads run up to 4 tasks at a time on one computer."
+      },
+
+      // Q53 - Q56: ans 3, 1, 0, 2
+      {
+        id: 53,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slides 15–17 & 23–25",
+        type: "Cross-Slide Synthesis",
+        q: "Trace what happens behind the scenes in Spark's memory and execution engine when you run:\n1) `totalsRDD = salesRDD.reduceByKey(lambda a, b: a + b)`\n2) `totalsRDD.collect()`\non a massive sales dataset:",
+        options: [
+          "Line 1 immediately loads the entire file into a single RAM block and overwrites `sales.csv`; Line 2 deletes the Driver.",
+          "Line 1 writes the output to HDFS via MapReduce; Line 2 starts the YARN ResourceManager.",
+          "Line 1 executes the shuffle on disk before building an execution plan; Line 2 converts the RDD into an empty server rack.",
+          "Line 1 describes the work lazily (Spark remembers the step without running it yet); Line 2 is an action requesting a result, which triggers parallel tasks across partitions, performs the shuffle/addition in memory (spilling temporary data to disk if RAM gets tight), and returns the final city totals."
+        ],
+        ans: 3,
+        exp: "This connects Slides 15–17 (Memory, Disk Spilling, Lazy Evaluation) with Slides 23–25 (`reduceByKey` as describing the work and `collect()` as the action that triggers execution and retrieves the result)."
+      },
+      {
+        id: 54,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 3–9 & 22–26",
+        type: "Deep Comparison",
+        q: "In both the Hadoop MapReduce example (Slides 3–9) and the Spark RDD example (Slides 22–25), the 6 records of `sales.csv` start divided across 3 parts (`Block 1/2/3` with `InputSplit 1/2/3` in MapReduce; `Partition 1/2/3` in `salesRDD`). Why do BOTH engines require a 'Shuffle' step before producing `Irbid: 180` and `Amman: 300`?",
+        options: [
+          "Because both engines require every record to be duplicated three times before addition.",
+          "Because in any partitioned dataset where records for the same key (`Irbid` or `Amman`) reside in different splits or partitions, a Shuffle is required to bring all contributions for the same key together before final aggregation.",
+          "Because neither engine can add two numbers unless the numbers are stored on separate continents.",
+          "Because Shuffle is the step that reads raw bytes from the local CSV file header."
+        ],
+        ans: 1,
+        exp: "Compare Slide 6 ('Why Do We Need Shuffle? Shuffle brings the contributions for the same key together') and Slide 24 ('Executing reduceByKey: Shuffle brings contributions together. Spark adds them by city'). In both engines, distributed records sharing the same key must be brought together."
+      },
+      {
+        id: 55,
+        topic: "RDDs, DataFrames & Partitions",
+        slide: "Slides 11, 13, 14 & 20",
+        type: "Scenario Analysis",
+        q: "A data scientist develops a PySpark program on a single laptop using `local[4]` to process a 4-partition dataset (`sales.csv`). Later, the exact same calculation is deployed on a multi-machine cluster to process a much larger dataset. According to Slides 11, 13, 14, and 20, why is this transition so natural in Spark?",
+        options: [
+          "Because in both setups, you use Python (PySpark) to describe the computation on partitioned data, and Spark coordinates execution—running tasks across worker threads within one computer in local mode, or across Executors on multiple machines in cluster mode.",
+          "Because Spark requires rewriting all Python code into C++ whenever moving from one machine to two machines.",
+          "Because `local[4]` automatically purchases cloud servers whenever a file exceeds 6 rows.",
+          "Because partitions only exist on a single laptop and disappear when running on a cluster."
+        ],
+        ans: 0,
+        exp: "Slides 11, 13, 14, and 20 show that Spark abstracts the partitioned execution: the same 4 partitions can be processed on one machine (via worker threads in local mode) or across multiple machines (via Executors on a cluster) while you simply describe the computation."
+      },
+      {
+        id: 56,
+        topic: "Memory, Spilling & Lazy Eval",
+        slide: "Slides 15 & 16",
+        type: "Conceptual Analysis",
+        q: "Why is it a misconception to say 'Apache Spark is purely an in-memory system that never uses disk storage'?",
+        options: [
+          "Because Spark stores all RDD partitions inside the CPU cache and never uses RAM either.",
+          "Because Spark cannot use RAM at all unless Apache Storm is installed.",
+          "Because while Spark uses Memory (RAM) to process data and keep useful results for reuse, it also uses Disk / Storage to read and write files and to write temporary data during sorting or grouping when RAM is tight (disk spilling).",
+          "Because Spark writes every single intermediate CPU instruction to a magnetic tape drive."
+        ],
+        ans: 2,
+        exp: "Slides 15 & 16 explicitly show both Memory (RAM) and Disk / Storage working together: RAM processes data and keeps useful results for reuse, while Disk reads/writes files and stores temporary data via disk spilling when RAM is tight."
+      },
+
+      // Q57 - Q60: ans 3, 1, 0, 2
+      {
+        id: 57,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 18, 23 & 27",
+        type: "Deep Comparison",
+        q: "In Part 2, we saw two different ways to express the city sales aggregation inside Apache Spark: using an RDD (`salesRDD.reduceByKey(lambda a, b: a + b)` on Slide 23) and using Spark SQL (`SELECT City, SUM(Sales) AS TotalSales FROM sales GROUP BY City;` on Slide 27). How do these two approaches relate?",
+        options: [
+          "The RDD approach returns Irbid = 100, whereas the Spark SQL approach returns Irbid = 180.",
+          "The RDD approach requires HDFS and YARN, whereas Spark SQL can only run on Apache Hive.",
+          "Spark SQL does not perform any grouping or addition; it only prints the SQL string.",
+          "Both run on the Apache Spark processing engine and produce the exact same result (Irbid = 180 JOD, Amman = 300 JOD): the RDD approach operates on key-value pairs using `reduceByKey`, while Spark SQL operates declaratively on named columns (`City`, `Sales`)."
+        ],
+        ans: 3,
+        exp: "Slides 18, 23, and 27 show that whether the sales data is represented as key-value pairs in an RDD (`reduceByKey(lambda a, b: a + b)`) or as named columns queried via Spark SQL (`SELECT City, SUM(Sales) ... GROUP BY City`), Spark executes the grouping and summation to produce `Irbid = 180 JOD` and `Amman = 300 JOD`."
+      },
+      {
+        id: 58,
+        topic: "Spark Roles, Driver & local[4]",
+        slide: "Slides 10, 12 & 13",
+        type: "Identify the FALSE Statement",
+        q: "Which of the following statements about cluster resource allocation and task execution (Slides 10, 12 & 13) is FALSE?",
+        options: [
+          "In the Hadoop ecosystem, YARN allocates CPU and memory to applications.",
+          "In a Spark application, the Executors are responsible for planning the overall computation and scheduling tasks across the Driver.",
+          "In Spark, the Driver plans and schedules tasks, while Executors run the tasks on partitions.",
+          "Spark's Monitoring function tracks progress and retries failed tasks."
+        ],
+        ans: 1,
+        exp: "Slide 13 states the exact opposite of B: 'Driver: Plans and schedules tasks. Executor: Runs tasks on partitions. The driver coordinates. Executors run the tasks.'"
+      },
+      {
+        id: 59,
+        topic: "MapReduce SUM & HDFS Blocks",
+        slide: "Slides 4, 14, 19 & 20",
+        type: "Architectural Synthesis",
+        q: "Across Part 2, several terms describe how data and work are divided: `HDFS Block`, `InputSplit`, `RDD Partition`, `Task`, and `Worker Thread`. Which option accurately defines all five terms without mixing them up?",
+        options: [
+          "HDFS Block: part of a file stored on disk; InputSplit: describes input for a Map task; RDD Partition: one part of the records in a Spark RDD; Task: unit of work executed on a partition/split; Worker Thread: OS-scheduled thread (e.g., the 4 in `local[4]`) that runs tasks on logical cores.",
+          "HDFS Block: a CPU thread; InputSplit: a backup replica on disk; RDD Partition: a physical server cabinet; Task: a named column in SQL; Worker Thread: an HDFS DataNode.",
+          "HDFS Block and RDD Partition both refer exclusively to physical hard drives, while InputSplit and Worker Thread both refer to SQL tables.",
+          "All five terms are synonymous names for the number 4 in `local[4]`."
+        ],
+        ans: 0,
+        exp: "This synthesizes Slide 4 (HDFS Block vs InputSplit), Slide 14 (Task vs Worker Thread in `local[4]`), and Slides 19–20 (RDD Partition vs Machine/Task)."
+      },
+      {
+        id: 60,
+        topic: "reduceByKey, SQL & Unified Engine",
+        slide: "Slides 1–28",
+        type: "Comprehensive Chapter Synthesis",
+        q: "Looking at the entire arc of Big Data — Introduction (Part 2) from Slide 1 to Slide 28, what is the overarching architectural takeaway of the chapter?",
+        options: [
+          "That Hadoop MapReduce is the only tool capable of grouping data by city, while Apache Spark is solely a file storage system.",
+          "That processing data in partitions requires fitting 100% of every file into RAM at once without ever using disk or lazy evaluation.",
+          "That distributed data processing solves problems like grouping and summing city sales by dividing data into parts (HDFS blocks/InputSplits in MapReduce, or RDD/DataFrame partitions in Spark), shuffling contributions by key, and aggregating—while Apache Spark advances this model with memory-efficient partitioned execution, lazy evaluation, and a single unified engine for batch, SQL, ML, and streaming.",
+          "That `sales.csv` can only be analyzed if we manually run MapReduce, then Hive, then Mahout, and finally Storm in sequential order."
+        ],
+        ans: 2,
+        exp: "This captures the complete narrative of Slides 1–28: from the MapReduce SUM foundation (blocks, splits, map, shuffle, reduce) to Spark's architectural model (Driver/Executors, `local[4]` threads, RAM + disk spilling, lazy evaluation, RDDs/DataFrames, `reduceByKey`, Spark SQL, and the unified Spark engine)."
+      }
+    ];
+
+    let userAnswers = {};
+    let currentTopic = "ALL";
+    let currentStatus = "ALL";
+
+    function setTopic(topic, btn) {
+      currentTopic = topic;
+      document.querySelectorAll("#topicFilters .chip").forEach(c => c.classList.remove("active"));
+      btn.classList.add("active");
+      renderQuestions();
+    }
+
+    function setStatus(status, btn) {
+      currentStatus = status;
+      document.querySelectorAll("#statusFilters .chip").forEach(c => c.classList.remove("active"));
+      btn.classList.add("active");
+      renderQuestions();
+    }
+
+    function selectAnswer(qId, optIdx) {
+      if (userAnswers[qId] !== undefined) return;
+      userAnswers[qId] = optIdx;
+      updateStats();
+      renderQuestions();
+    }
+
+    function retryQuestion(qId) {
+      delete userAnswers[qId];
+      updateStats();
+      renderQuestions();
+    }
+
+    function resetAll() {
+      userAnswers = {};
+      updateStats();
+      renderQuestions();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function updateStats() {
+      const answeredIds = Object.keys(userAnswers);
+      let correct = 0;
+      let wrong = 0;
+      answeredIds.forEach(id => {
+        const q = questions.find(item => item.id === Number(id));
+        if (userAnswers[id] === q.ans) correct++;
+        else wrong++;
+      });
+      const totalAns = answeredIds.length;
+      const pct = totalAns > 0 ? Math.round((correct / totalAns) * 100) : 0;
+
+      document.getElementById("stat-progress").textContent = `Answered: ${totalAns} / ${questions.length}`;
+      document.getElementById("stat-correct").textContent = `Correct: ${correct}`;
+      document.getElementById("stat-wrong").textContent = `Wrong: ${wrong}`;
+      document.getElementById("stat-score").textContent = `Score: ${pct}%`;
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById("questionsContainer");
+      const query = document.getElementById("searchBox").value.trim().toLowerCase();
+      const letters = ["A", "B", "C", "D"];
+
+      const filtered = questions.filter(q => {
+        if (currentTopic !== "ALL" && q.topic !== currentTopic) return false;
+        if (currentStatus === "UNANSWERED" && userAnswers[q.id] !== undefined) return false;
+        if (currentStatus === "WRONG" && (userAnswers[q.id] === undefined || userAnswers[q.id] === q.ans)) return false;
+        if (currentStatus === "FALSE_STMT" && q.type !== "Identify the FALSE Statement") return false;
+        if (query) {
+          const hay = (q.q + " " + q.topic + " " + q.slide + " " + q.type + " " + q.options.join(" ")).toLowerCase();
+          if (!hay.includes(query)) return false;
+        }
+        return true;
+      });
+
+      container.innerHTML = filtered.map(q => {
+        const chosen = userAnswers[q.id];
+        const isAnswered = chosen !== undefined;
+        const isCorrect = isAnswered && chosen === q.ans;
+        const cardClass = isAnswered ? (isCorrect ? "q-card answered-correct" : "q-card answered-wrong") : "q-card";
+
+        const optsHtml = q.options.map((optText, idx) => {
+          let btnClass = "opt-btn";
+          if (isAnswered) {
+            if (idx === q.ans) btnClass += " correct-choice";
+            else if (idx === chosen && chosen !== q.ans) btnClass += " wrong-choice";
+          }
+          return `
+            <button class="${btnClass}" ${isAnswered ? "disabled" : ""} onclick="selectAnswer(${q.id}, ${idx})">
+              <span class="opt-letter">${letters[idx]}</span>
+              <span>${optText}</span>
+            </button>
+          `;
+        }).join("");
+
+        return `
+          <div class="${cardClass}" id="q-card-${q.id}">
+            <div class="q-meta">
+              <span class="badge">Q${q.id} of 60</span>
+              <span class="badge slide">${q.slide}</span>
+              <span class="badge">${q.topic}</span>
+              <span class="badge type">${q.type}</span>
+            </div>
+            <div class="q-text">${q.q}</div>
+            <div class="options-list">
+              ${optsHtml}
+            </div>
+            <div class="explanation-box ${isAnswered ? "visible" : ""}">
+              <div class="exp-header ${isCorrect ? "pass" : "fail"}">
+                <span>${isCorrect ? "✓ Correct! Deep Conceptual Match (Answer: " + letters[q.ans] + ")" : "✗ Incorrect — You chose " + (isAnswered ? letters[chosen] : "") + ", but the correct answer is " + letters[q.ans]}</span>
+                <button class="retry-mini" onclick="retryQuestion(${q.id})">Retry Question</button>
+              </div>
+              <div><strong>Conceptual Explanation (${q.slide}):</strong> ${q.exp}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function downloadHTML() {
+      const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([htmlContent], { type: "text/html" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "big_data_part2_deep_exam_60.html";
+      a.click();
+    }
+
+    renderQuestions();
+  </script>
+</body>
+</html>
